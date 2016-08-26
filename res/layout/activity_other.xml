@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/skin_default_theme_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置成默认主题" />
+
+    <Button
+        android:id="@+id/skin_new_theme_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置成新主题" />
+
+    <ImageView
+        android:id="@+id/skin_other_img"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@drawable/skin_word_bg" />
+
+</LinearLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeRoot>
+    
+    <colors>
+        <ConfigItem viewId="skin_text1" method="setBackgroundColor" resName="tab_background_stack"/>
+        <ConfigItem viewId="next_page" method="setBackgroundColor" resName="theme"/>
+        <ConfigItem viewId="next_page" method="setTextColor" resName="text_color"/>
+    </colors>
+    
+    <drawables>
+        <ConfigItem viewId="skin_root_layout" method="setBackgroundDrawable" resName="skin_main_bg"/>
+    </drawables>
+    
+    <CustomValue>
+        <ValueDef name="skin_digits" value="te_text_hint" type="color"/>
+    </CustomValue>
+    
+</ThemeRoot>

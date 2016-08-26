@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Drawable.ConstantState;
+import android.os.Environment;
 import android.util.Log;
 
 import com.wenba.bangbang.skin.SkinApplyHandler.CustomValue;
@@ -32,7 +33,7 @@ public class SkinPackageManager {
 
 	public static final String DEFAULT_THEME = "default";
 
-	public static final String SKIN_PLUG_PACKAGE = "com.wenba.theme.plug";
+	public static final String SKIN_PLUG_PACKAGE = "com.example.skinappledarkdemo";
 
 	public static final String SKIN_SETTING = "skin_setting";
 
@@ -60,14 +61,12 @@ public class SkinPackageManager {
 	public Resources specialThemeResources;
 
 	public String getSkinApkDownloadPath(final String apkName, int version) {
-		return new StringBuffer(themeRootPath).append("/").append(apkName)
-				.append("-").append(version).append(".apk").toString();
+		return new StringBuffer(themeRootPath).append("/").append(apkName).append("-").append(version).append(".apk").toString();
 
 	}
 
 	public String getSkinApkDownloadTempPath(final String apkName, int version) {
-		return new StringBuffer(themeRootPath).append("/").append(apkName)
-				.append("-").append(version).append(".temp").toString();
+		return new StringBuffer(themeRootPath).append("/").append(apkName).append("-").append(version).append(".temp").toString();
 
 	}
 
@@ -105,8 +104,7 @@ public class SkinPackageManager {
 		}
 
 		if (apkFiles.length == 1) {
-			return apkFiles[0].getName().matches(".*\\.apk") ? apkFiles[0]
-					.getAbsolutePath() : null;
+			return apkFiles[0].getName().matches(".*\\.apk") ? apkFiles[0].getAbsolutePath() : null;
 		} else {
 			int version = parseApkVersion(apkFiles[0].getName());
 			File target = apkFiles[0];
@@ -181,8 +179,7 @@ public class SkinPackageManager {
 		for (File file : tempFiles) {
 			PackageInfo mInfo = getSkinPackageInfo(file.getAbsolutePath());
 			if (mInfo != null) {
-				File apkFile = new File(file.getAbsolutePath().replace(".temp",
-						".apk"));
+				File apkFile = new File(file.getAbsolutePath().replace(".temp", ".apk"));
 				if (!file.renameTo(apkFile)) {
 					try {
 						FileUtils.deleteQuietly(apkFile);
@@ -236,7 +233,7 @@ public class SkinPackageManager {
 	private SkinPackageManager(Context mContext) {
 		this.mContext = mContext;
 		try {
-			File file = mContext.getFilesDir();
+			File file = Environment.getExternalStorageDirectory();//mContext.getFilesDir();
 			if (file != null) {
 				file = new File(file, SKIN_DIR);
 				if (!file.exists()) {
@@ -273,12 +270,7 @@ public class SkinPackageManager {
 	}
 
 	public Resources getThemeResources(boolean specialTheme) {
-		if (DEFAULT_THEME.equals(curTheme) && specialTheme
-				&& specialThemeResources != null) {// 只有在当前主题为默认主题时加载首页的特殊主题
-			return specialThemeResources;
-		} else {
-			return getThemeResources();
-		}
+		return getThemeResources();
 	}
 
 	public String getCurSkinTheme() {
@@ -359,8 +351,7 @@ public class SkinPackageManager {
 		return getThemeDrawableState(drawableName, false);
 	}
 
-	public ConstantState getThemeDrawableState(String drawableName,
-			boolean isSpecial) {
+	public ConstantState getThemeDrawableState(String drawableName, boolean isSpecial) {
 		Drawable drawable = getThemeDrawable(drawableName);
 		if (drawable != null) {
 			return drawable.getConstantState();
@@ -411,14 +402,12 @@ public class SkinPackageManager {
 	private int getThemeResourceId(String name, String type, boolean isSpecial) {
 		Resources resources = getThemeResources(isSpecial);
 
-		String pkgName = DEFAULT_THEME.equals(curTheme)
-				&& (!isSpecial || specialThemeResources == null) ? mContext
-				.getPackageName() : SkinPackageManager.SKIN_PLUG_PACKAGE;
+		String pkgName = DEFAULT_THEME.equals(curTheme) && (!isSpecial || specialThemeResources == null) ? mContext.getPackageName()
+				: SkinPackageManager.SKIN_PLUG_PACKAGE;
 
 		int resId = resources.getIdentifier(name, type, pkgName);
 		if (resId <= 0) {
-			Log.d("skin", "no resource found: type = " + type + ", name = "
-					+ name);
+			Log.d("skin", "no resource found: type = " + type + ", name = " + name);
 		}
 
 		return resId;
@@ -446,8 +435,7 @@ public class SkinPackageManager {
 				return resources.getDrawable(resId);
 			} catch (OutOfMemoryError e) {
 				Log.w("wenba", e);
-				Log.e("skin", "OutOfMemoryError: drawableName = "
-						+ item.value);
+				Log.e("skin", "OutOfMemoryError: drawableName = " + item.value);
 			}
 		}
 		return null;
@@ -567,13 +555,11 @@ public class SkinPackageManager {
 		try {
 			assetManager = AssetManager.class.newInstance();
 
-			Method addAssetPath = assetManager.getClass().getMethod(
-					"addAssetPath", String.class);
+			Method addAssetPath = assetManager.getClass().getMethod("addAssetPath", String.class);
 			addAssetPath.invoke(assetManager, dexPath);
 
 			Resources superRes = mContext.getResources();
-			resources = new Resources(assetManager,
-					superRes.getDisplayMetrics(), superRes.getConfiguration());
+			resources = new Resources(assetManager, superRes.getDisplayMetrics(), superRes.getConfiguration());
 		} catch (Exception e) {
 			Log.w("wenba", e);
 		}
